@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {CardList} from './components/card-list/card-list.cpn';
 
@@ -9,7 +8,8 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            monsters: []
+            monsters: [],
+            searchField: ''
         };
     };
 
@@ -20,16 +20,16 @@ class App extends React.Component {
     }
 
     render() {
+        //console.log(this.state.monsters.name);
+
         return (
             <div className="App">
-                <CardList name='monsters'>
-                {
-                    this.state.monsters.map(monster =>
-                        (<h1 key={monster.id}> { monster.name } </h1>)
-                    )
-                }
-                </CardList>
+                <input
+                    type='search'
+                    placeholder='Search monsters'
+                    onChange={e => this.setState({searchField: e.target.value}, () => console.log(this.state))} />
 
+                <CardList monsterList={this.state.monsters} />
 
                 {/*<header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
