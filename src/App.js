@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
-import {CardList} from './components/card-list/card-list.cpn';
+import { CardList } from './components/card-list/card-list.cpn';
+import { SearchBox } from './components/search-box/search-box.cpn';
 
 class App extends React.Component {
 
@@ -11,25 +12,42 @@ class App extends React.Component {
             monsters: [],
             searchField: ''
         };
+
+        //this.changeHandler = this.changeHandler.bind(this);
     };
 
     componentDidMount() {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
-            .then(users => this.setState({monsters: users}));
+            .then(users => this.setState({ monsters: users }));
+    }
+
+    //event-driven function (ES6 feature - arrow function)
+    changeHandler = (e) => {
+        this.setState({ searchField: e.target.value });
     }
 
     render() {
         //console.log(this.state.monsters.name);
 
+        const { monsters, searchField } = this.state;
+
+        const filteredMonsters = monsters.filter(monster =>
+            monster.name.toLowerCase().includes(searchField.toLowerCase()));
+
+
         return (
             <div className="App">
-                <input
+                {/* <input
                     type='search'
                     placeholder='Search monsters'
-                    onChange={e => this.setState({searchField: e.target.value}, () => console.log(this.state))} />
+                    onChange={e => this.setState({ searchField: e.target.value }, () => console.log(this.state))} //=> JSX event, not html event
+                /> */}
 
-                <CardList monsterList={this.state.monsters} />
+                <SearchBox placeholder='Search monsters' changeHandler={this.changeHandler} />
+
+                {/* <CardList monsterList={this.state.monsters} /> */}
+                <CardList monsterList={filteredMonsters} />
 
                 {/*<header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
@@ -55,6 +73,8 @@ class App extends React.Component {
             </div>
         )
     };
+
+
 }
 
 /*function App() {
